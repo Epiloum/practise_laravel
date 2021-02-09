@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('hello', function () {
+    return 'Hello World!';
+});
+
+Route::get('{foo}', function ($foo) {
+    return $foo . ' ' . date('Y-m-d H:i:s');
+});
