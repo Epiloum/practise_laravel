@@ -17,14 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-<<<<<<< HEAD
-Route::get('hello', function () {
-    return 'Hello World!';
+Route::get('/test', function () {
+    return date('Y-m-d H:i:s');
 });
 
-Route::get('{foo}', function ($foo) {
-    return $foo . ' ' . date('Y-m-d H:i:s');
-});
-=======
-Route::get('/dbtest', [App\Http\Controllers\DbTest::class, 'test']);
->>>>>>> feature/routing-to-controller
+Route::get('/dbtest', [App\Http\Controllers\DbTest::class, 'test_query']);
