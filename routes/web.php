@@ -13,12 +13,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Index
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Router Test
 Route::get('/test', function () {
     return date('Y-m-d H:i:s');
 });
 
+// Middleware Test
+Route::get('/mwtest', function () {
+    return 'mwtest(' . $_GET['value'] . ') ' . date('Y-m-d H:i:s');
+})->middleware(App\Http\Middleware\MwTest::class);
+
+// Controller & DB Query Test
 Route::get('/dbtest', [App\Http\Controllers\DbTest::class, 'test_query']);
+
+// Error
+Route::get('/err', function () {
+    return 'Error Page (' . date('Y-m-d H:i:s') . ')';
+});
