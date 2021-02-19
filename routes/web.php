@@ -35,3 +35,7 @@ Route::get('/dbtest', [App\Http\Controllers\DbTest::class, 'test_query']);
 Route::get('/err', function () {
     return 'Error Page (' . date('Y-m-d H:i:s') . ')';
 });
+
+// Sign in for Validation Test
+Route::get('/signin', [App\Http\Controllers\SignIn::class, 'frm']);
+Route::post('/signin/proc', [App\Http\Controllers\SignIn::class, 'proc']);
