@@ -18,7 +18,7 @@ class DbTest extends Controller
 
     public function test_query()
     {
-        $users = DB::connection('mysql')->select('select * from users where id = ?', ['test2']);
+        $users = DB::connection('mysql')->select('select * from users where no = ?', [7, 11,28]);
         ob_start();
         var_dump($users);
 

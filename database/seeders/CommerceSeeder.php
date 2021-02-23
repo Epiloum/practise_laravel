@@ -16,7 +16,7 @@ class CommerceSeeder extends Seeder
      */
     public function run()
     {
-		$cntUsers = rand(30, 50);
+		$cntUsers = rand(200, 300);
 
 		for($i=0; $i<$cntUsers; $i++)
 		{
@@ -28,7 +28,7 @@ class CommerceSeeder extends Seeder
 			]);
 		}
 		
-		$cntProducts = rand(20, 40);
+		$cntProducts = rand(30, 60);
 		for($i=0; $i<$cntProducts; $i++)
 		{
 			$price = rand(1, 300) * 100;
@@ -40,7 +40,7 @@ class CommerceSeeder extends Seeder
 				'inventory' => rand(10, 1000)
 			]);
 			
-			$cntOrders = rand(-20, 5);
+			$cntOrders = rand(-16, 4);
 
 			for($j=0; $j<$cntOrders; $j++)
 			{
