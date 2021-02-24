@@ -43,86 +43,47 @@ Route::post('/signin/proc', [App\Http\Controllers\SignIn::class, 'proc']);
 // Commerce Prototype
 Route::get('/user/list', function(){
     // Practise SELECT by Eloquent ORM
-    $users = App\Models\User::all();
-
-    ob_start();
-
-    echo '<table>';
-    echo '<thead>';    
-    echo '<tr>';
-    echo '<th>no</th>';
-    echo '<th>Name</th>';
-    echo '<th>Email</th>';
-    echo '<th>Grade</th>';
-    echo '</tr>';
-    echo '</thead>';
-    echo '<tbody>';
-
-    foreach ($users as $v) {
-        echo '<tr>';
-        echo '<td>' . $v->no . '</td>';
-        echo '<td>' . $v->name . '</td>';
-        echo '<td>' . $v->email . '</td>';
-        echo '<td>' . $v->grade . '</td>';
-        echo '</tr>';
-    }
-
-    echo '</tbody>';
-    echo '</table>';
-
-    return '<pre>' . ob_get_clean() . '</pre>';
+    return view('user_list', [
+        'users' => App\Models\User::all()
+    ]);
 });
 
-Route::get('/order/list/{user}', function($user){    
+Route::get('/order/list/subquery', function(){
     // Practise Subquery by Eloquent ORM
     $orders = App\Models\Order::addSelect([
         'email' => App\Models\User::select(['email'])->whereColumn('no', 'orders.user_buy'),
         'grade' => App\Models\User::select(['grade'])->whereColumn('no', 'orders.user_buy')
+   ])->get();
+
+    return view('order_list', [
+        'orders' => $orders
     ]);
+});
 
-    ob_start();
+Route::get('/order/list/relation', function(){
+    // Practise Eloquent Relationships
+    $res = App\Models\Order::all();
+    $orders = [];
 
-    echo '<table>';
-
-    echo '<thead>';    
-    echo '<tr>';
-    echo '<th>Buyer</th>';
-    echo '<th>Buyer`s Email</th>';
-    echo '<th>Buyer`s Grade</th>';
-    echo '<th>Product</th>';
-    echo '<th>Qty</th>';
-    echo '<th>Amount</th>';
-    echo '<th>Requirements</th>';
-    echo '</tr>';
-    echo '</thead>';
-
-    echo '<tbody>';
-
-    foreach ($orders->get() as $v) {
-        echo '<tr>';
-        echo '<td>' . $v->user_buy . '</td>';
-        echo '<td>' . $v->email . '</td>';
-        echo '<td align="right">' . $v->grade . '</td>';
-        echo '<td>' . $v->product_no . '</td>';
-        echo '<td align="right">' . number_format($v->qty) . '</td>';
-        echo '<td align="right">' . number_format($v->amt) . '</td>';
-        echo '<td>' . $v->requirements . '</td>';
-        echo '</tr>';
+    foreach($res as $v)
+    {
+        $v->email = $v->buyer->email;
+        $v->grade = $v->buyer->grade;
+        $orders[] = $v;
     }
 
-    echo '</tbody>';
+    return view('order_list', [
+        'orders' => $orders
+    ]);
+});
 
-    echo '<tfoot>';    
-    echo '<tr>';
-    echo '<th>Count</th>';
-    echo '<th colspan="2" align="right">' . number_format($orders->count()) . '</th>';
-    echo '<th>Total of Amount</th>';
-    echo '<th colspan="2" align="right">' . number_format($orders->sum('amt')) . '</th>';
-    echo '<th></th>';
-    echo '</tr>';
-    echo '</tfoot>';
+/*
+Route::get('/order/list/{user}', function($user){
+    // Practise Subquery by Eloquent ORM
+    $orders = App\Models\Order::addSelect([
+      'email' => App\Models\User::select(['email'])->whereColumn('no', 'orders.user_buy'),
+      'grade' => App\Models\User::select(['grade'])->whereColumn('no', 'orders.user_buy')
+    ]);
 
-    echo '</table>';
-
-    return '<pre>' . ob_get_clean() . '</pre>';
 })->where('user', '[0-9]+');
+*/
