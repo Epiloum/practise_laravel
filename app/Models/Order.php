@@ -20,4 +20,9 @@ class Order extends Model
     {
         return $this->belongsTo('App\Models\User', 'user_buy', 'no');
     }
+    
+    public function fee()
+    {
+        return $this->morphOne('App\Models\Fee', 'billed', 'billed_type', 'billed_no');
+    }
 }

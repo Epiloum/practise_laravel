@@ -20,4 +20,9 @@ class Product extends Model
     {
         return $this->belongsTo('App\Models\User', 'user_register', 'no');
     }
+    
+    public function fee()
+    {
+        return $this->morphOne('App\Models\Fee', 'billed');
+    }
 }

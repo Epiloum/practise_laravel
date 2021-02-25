@@ -56,7 +56,8 @@ Route::get('/order/list/subquery', function(){
    ])->get();
 
     return view('order_list', [
-        'orders' => $orders
+        'orders' => $orders,
+        'relation' => false
     ]);
 });
 
@@ -67,13 +68,12 @@ Route::get('/order/list/relation', function(){
 
     foreach($res as $v)
     {
-        $v->email = $v->buyer->email;
-        $v->grade = $v->buyer->grade;
         $orders[] = $v;
     }
 
     return view('order_list', [
-        'orders' => $orders
+        'orders' => $orders,
+        'relation' => true
     ]);
 });
 

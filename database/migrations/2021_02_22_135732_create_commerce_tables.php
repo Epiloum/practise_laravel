@@ -13,6 +13,7 @@ class CreateCommerceTables extends Migration
      */
     public function up()
     {
+        // 회원
         Schema::create('users', function (Blueprint $table) {
             $table->id('no');
             $table->string('name', 32);
@@ -22,6 +23,7 @@ class CreateCommerceTables extends Migration
             $table->timestamps();
         });
 
+        // 상품
         Schema::create('products', function (Blueprint $table) {
             $table->id('no');
             $table->unsignedBigInteger('user_register');
@@ -33,6 +35,7 @@ class CreateCommerceTables extends Migration
             $table->foreign('user_register')->references('no')->on('users');
         });
 
+        // 주문
         Schema::create('orders', function (Blueprint $table) {
             $table->id('no');
             $table->unsignedBigInteger('user_buy');
@@ -44,6 +47,16 @@ class CreateCommerceTables extends Migration
 
             $table->foreign('user_buy')->references('no')->on('users');
             $table->foreign('product_no')->references('no')->on('products');
+        });
+        
+        // 수수료(상품/주문과 1:1 다형성 관계)
+        Schema::create('fees', function (Blueprint $table) {
+            $table->id('no');
+            $table->string('memo', 256);
+            $table->unsignedInteger('amt');
+            $table->unsignedBigInteger('billed_no');
+            $table->string('billed_type', 64);
+            $table->timestamps();
         });
     }
 
@@ -57,5 +70,6 @@ class CreateCommerceTables extends Migration
         Schema::dropIfExists('orders');
         Schema::dropIfExists('products');
         Schema::dropIfExists('users');
+        Schema::dropIfExists('fees');
     }
 }
