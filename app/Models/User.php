@@ -21,17 +21,17 @@ class User extends Authenticatable
         'password',
     ];
 
-    public function product()
+    public function products()
     {
         return $this->hasMany('App\Models\Product', 'user_register', 'no');
     }
 
-    public function buyOrder()
+    public function buyOrders()
     {
         return $this->hasMany('App\Models\Order', 'user_buy', 'no');
     }
 
-    public function sellOrder()
+    public function sellOrders()
     {
         return $this->hasManyThrough(
             'App\Models\Order',

@@ -10,6 +10,8 @@
             @if($relation)
                 <th>Fee</th>
             @endif
+            <th>Product</th>
+            <th>Quantity</th>
             <th>Amount</th>
             <th>Requirements</th>
         </tr>

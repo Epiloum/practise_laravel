@@ -31,11 +31,6 @@ Route::get('/mwtest', function () {
 // Controller & DB Query Test
 Route::get('/dbtest', [App\Http\Controllers\DbTest::class, 'test_query']);
 
-// Error
-Route::get('/err', function () {
-    return 'Error Page (' . date('Y-m-d H:i:s') . ')';
-});
-
 // Sign in for Validation Test
 Route::get('/signin', [App\Http\Controllers\SignIn::class, 'frm']);
 Route::post('/signin/proc', [App\Http\Controllers\SignIn::class, 'proc']);
@@ -45,6 +40,20 @@ Route::get('/user/list', function(){
     // Practise SELECT by Eloquent ORM
     return view('user_list', [
         'users' => App\Models\User::all()
+    ]);
+});
+
+Route::get('/user/list/buy', function(){
+    // Practise querying relationship existence by Eloquent ORM
+    return view('user_list', [
+        'users' => App\Models\User::has('buyOrders')->get()
+    ]);
+});
+
+Route::get('/user/list/didntbuy', function(){
+    // Practise querying relationship existence by Eloquent ORM
+    return view('user_list', [
+        'users' => App\Models\User::doesntHave('buyOrders')->get()
     ]);
 });
 
@@ -66,8 +75,7 @@ Route::get('/order/list/relation', function(){
     $res = App\Models\Order::all();
     $orders = [];
 
-    foreach($res as $v)
-    {
+    foreach ($res as $v) {
         $orders[] = $v;
     }
 
@@ -77,13 +85,14 @@ Route::get('/order/list/relation', function(){
     ]);
 });
 
-/*
-Route::get('/order/list/{user}', function($user){
-    // Practise Subquery by Eloquent ORM
-    $orders = App\Models\Order::addSelect([
-      'email' => App\Models\User::select(['email'])->whereColumn('no', 'orders.user_buy'),
-      'grade' => App\Models\User::select(['grade'])->whereColumn('no', 'orders.user_buy')
-    ]);
+Route::get('/order/list/{user_no}', function($user_no){
+    // Practise querying relations by Eloquent ORM
+    $user = App\Models\User::where('no', $user_no)->first();
 
-})->where('user', '[0-9]+');
-*/
+    return view('user_list', [
+        'users' => [$user]
+    ]) . view('order_list', [
+        'orders' => $user->buyOrders()->get(),
+        'relation' => true
+    ]);
+})->where('user_no', '[0-9]+');

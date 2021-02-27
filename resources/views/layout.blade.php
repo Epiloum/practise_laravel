@@ -9,6 +9,10 @@
             display: inline-block;
             width: 80px;
         }
+        table, td, th {
+            border: 1px solid #888;
+            border-collapse: collapse;
+        }
     </style>
 </head>
 <body>
