@@ -27,13 +27,13 @@ class CommerceSeeder extends Seeder
                 'password' => Hash::make('password')
             ]);
         }
-        
+
         $cntProducts = rand(30, 60);
         for($i=0; $i<$cntProducts; $i++)
         {
             // Product
             $price = rand(1, 300) * 100;
-            
+
             $productNo = DB::table('products')->insertGetId([
                 'user_register' => rand(1, $cntUsers),
                 'title' => Str::random(50),
@@ -48,7 +48,7 @@ class CommerceSeeder extends Seeder
                 'billed_no' => $productNo,
                 'billed_type' => 'App\Models\Product'
             ]);
-            
+
             // Order
             $cntOrders = rand(-16, 4);
 
@@ -63,7 +63,7 @@ class CommerceSeeder extends Seeder
                     'amt' => $price * $qty,
                     'requirements' => Str::random(100)
                 ]);
-                
+
                 // Selling Fee
                 DB::table('fees')->insertGetId([
                     'memo' => Str::random(rand(50, 150)),

@@ -18,6 +18,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// DB
+Route::get('/phpinfo', function () {
+    ob_start();
+    phpinfo();
+    return ob_get_clean();
+});
+
 // Router Test
 Route::get('/test', function () {
     return date('Y-m-d H:i:s');
@@ -31,7 +38,7 @@ Route::get('/test/mw', function () {
 // Controller & DB Query Test
 Route::get('/test/db', [App\Http\Controllers\DbTest::class, 'test_query']);
 
-Route::get('/test/collection', function () {
+Route::get('/test/db/collection', function () {
     $res = [];
 
     // contains()
@@ -150,3 +157,29 @@ Route::get('/order/list/{user_no}', function ($user_no) {
         'relation' => true
     ]);
 })->where('user_no', '[0-9]+');
+
+Route::get('/product/list', function () {
+    $products = App\Models\Product::withCount('order')->get();
+
+    return view('product_list', [
+        'products' => $products,
+        'orderCount' => true
+    ]);
+});
+
+Route::get('fee/list', function () {
+    // Practise querying to morph relations by Eloquent ORM
+    $fees = App\Models\Fee::whereHasMorph(
+        'billed',
+        ['App\Models\Order', 'App\Models\Product'],
+        function (Illuminate\Database\Eloquent\Builder $query, $type) {
+            $query->where('amt', '>=', '100');
+
+            if ($type === 'App\Models\Product') {
+                $query->where('billed_no', '<=', '5');
+            }
+        }
+    )->get();
+
+    return strval($fees);
+});
