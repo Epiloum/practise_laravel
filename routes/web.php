@@ -18,7 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// DB
 Route::get('/phpinfo', function () {
     ob_start();
     phpinfo();
@@ -178,8 +177,30 @@ Route::get('fee/list', function () {
             if ($type === 'App\Models\Product') {
                 $query->where('billed_no', '<=', '5');
             }
-        }
-    )->get();
+        })->get();
 
     return strval($fees);
+});
+
+Route::get('fee/count', function () {
+    // Counting Related Models On Morph To Relationships
+    $fees = App\Models\Fee::with([
+        'billed' => function (Illuminate\Database\Eloquent\Relations\MorphTo $morphTo) {
+            $morphTo->morphWithCount(
+                [
+                    App\Models\Order::class => ['buyer'],
+                    App\Models\Product::class => ['user']
+                ]
+            );
+        }
+    ])->get();
+
+    return strval($fees);
+});
+
+Route::get('fee/user', function () {
+    // Nested Eager Loading
+    $orders = App\Models\Order::with('product.user')->first();
+
+    return strval($orders);
 });

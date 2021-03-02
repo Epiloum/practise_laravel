@@ -13,7 +13,7 @@ class CreateCommerceTables extends Migration
      */
     public function up()
     {
-        // È¸¿ø
+        // íšŒì›
         Schema::create('users', function (Blueprint $table) {
             $table->id('no');
             $table->string('name', 32);
@@ -23,7 +23,7 @@ class CreateCommerceTables extends Migration
             $table->timestamps();
         });
 
-        // »óÇ°
+        // ìƒí’ˆ
         Schema::create('products', function (Blueprint $table) {
             $table->id('no');
             $table->unsignedBigInteger('user_register');
@@ -35,7 +35,7 @@ class CreateCommerceTables extends Migration
             $table->foreign('user_register')->references('no')->on('users');
         });
 
-        // ÁÖ¹®
+        // ì£¼ë¬¸
         Schema::create('orders', function (Blueprint $table) {
             $table->id('no');
             $table->unsignedBigInteger('user_buy');
@@ -48,14 +48,21 @@ class CreateCommerceTables extends Migration
             $table->foreign('user_buy')->references('no')->on('users');
             $table->foreign('product_no')->references('no')->on('products');
         });
-        
-        // ¼ö¼ö·á(»óÇ°/ÁÖ¹®°ú 1:1 ´ÙÇü¼º °ü°è)
+
+        // ìˆ˜ìˆ˜ë£Œ(íšŒì›ê³¼ ì£¼ë¬¸/ìƒí’ˆê°„ 1:1 ë‹¤í˜•ì„± ê´€ê³„)
         Schema::create('fees', function (Blueprint $table) {
             $table->id('no');
             $table->string('memo', 256);
             $table->unsignedInteger('amt');
             $table->unsignedBigInteger('billed_no');
             $table->string('billed_type', 64);
+            $table->timestamps();
+        });
+
+        // ìŠ¤ì¼€ì¥´ëŸ¬ í…ŒìŠ¤íŠ¸
+        Schema::create('scheduled', function (Blueprint $table) {
+            $table->id('no');
+            $table->string('memo', 256);
             $table->timestamps();
         });
     }
@@ -71,5 +78,6 @@ class CreateCommerceTables extends Migration
         Schema::dropIfExists('products');
         Schema::dropIfExists('users');
         Schema::dropIfExists('fees');
+        Schema::dropIfExists('scheduled');
     }
 }
