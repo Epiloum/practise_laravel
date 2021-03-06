@@ -1,0 +1,79 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        user: user
+        uid: 1000
+    image: php:7.4-fpm
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./.docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "57080:80"
+      - "57443:443"
+    volumes:
+      - ./:/var/www
+      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  #MySQL Service
+  mysql:
+    image: mariadb:10.5.9
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: here_is_root_password
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: here_is_user_password
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./.docker/mysql/data/laravel:/var/lib/mysql/laravel
+      #- ./.docker/mysql/conf:/etc/mysql/conf/my.cnf
+    networks:
+      - app-network
+
+  #PHP MyAdmin
+  myadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: myadmin
+    ports:
+      - "49080:80"
+    environment:
+      UPLOAD_LIMIT: 1024M
+      PMA_HOST: mysql
+    volumes:
+      - ./.docker/mysql/data:/var/lib/mysql/
+      - ./.docker/mysql/conf/my.cnf:/etc/mysql/conf/my.cnf
+    networks:
+      - app-network
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
