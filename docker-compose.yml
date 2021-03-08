@@ -4,8 +4,8 @@ services:
   #PHP Service
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: ../Dockerfile
       args:
         user: user
         uid: 1000
@@ -54,7 +54,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      - ./.docker/mysql/data/laravel:/var/lib/mysql/laravel
+      - ./.docker/mysql/data/:/var/lib/mysql/data
       #- ./.docker/mysql/conf:/etc/mysql/conf/my.cnf
     networks:
       - app-network
@@ -69,7 +69,7 @@ services:
       UPLOAD_LIMIT: 1024M
       PMA_HOST: mysql
     volumes:
-      - ./.docker/mysql/data:/var/lib/mysql/
+      - ./.docker/mysql/data:/var/lib/mysql/data
       - ./.docker/mysql/conf/my.cnf:/etc/mysql/conf/my.cnf
     networks:
       - app-network

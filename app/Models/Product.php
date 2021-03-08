@@ -9,18 +9,16 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'no';
-
     public function order()
     {
-        return $this->hasMany('App\Models\Order', 'product_no', 'no');
+        return $this->hasMany('App\Models\Order', 'product_id', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'user_register', 'no');
+        return $this->belongsTo('App\Models\User', 'user_register', 'id');
     }
-    
+
     public function fee()
     {
         return $this->morphOne('App\Models\Fee', 'billed');

@@ -11,7 +11,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $primaryKey = 'no';
     protected $fillable = [
         'name',
         'email',
@@ -23,12 +22,12 @@ class User extends Authenticatable
 
     public function products()
     {
-        return $this->hasMany('App\Models\Product', 'user_register', 'no');
+        return $this->hasMany('App\Models\Product', 'user_register', 'id');
     }
 
     public function buyOrders()
     {
-        return $this->hasMany('App\Models\Order', 'user_buy', 'no');
+        return $this->hasMany('App\Models\Order', 'user_buy', 'id');
     }
 
     public function sellOrders()
@@ -37,9 +36,9 @@ class User extends Authenticatable
             'App\Models\Order',
             'App\Models\Product',
             'user_register',
-            'product_no',
-            'no',
-            'no'
+            'product_id',
+            'id',
+            'id'
         );
     }
 }

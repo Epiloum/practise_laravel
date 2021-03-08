@@ -24,6 +24,9 @@ Route::get('/phpinfo', function () {
     return ob_get_clean();
 });
 
+// Resource Controller
+Route::resource('photos', App\Http\Controllers\PhotoController::class);
+
 // Router Test
 Route::get('/test', function () {
     return date('Y-m-d H:i:s');
@@ -62,11 +65,11 @@ Route::get('/test/db/collection', function () {
     // makeVisible() and makeHidden() / It doesn't work clone! Is it Singleton?!
     $tmp1 = App\Models\Order::all();
     $tmp2 = App\Models\Order::all();
-    $res['makeHidden'] = $tmp1->makeHidden(['user_buy', 'product_no', 'requirements', 'created_at', 'updated_at']);
-    $res['makeVisible'] = $tmp2->makeHidden(['user_buy', 'product_no', 'requirements', 'created_at', 'updated_at'])->makeVisible(['product_no']);
+    $res['makeHidden'] = $tmp1->makeHidden(['user_buy', 'product_id', 'requirements', 'created_at', 'updated_at']);
+    $res['makeVisible'] = $tmp2->makeHidden(['user_buy', 'product_id', 'requirements', 'created_at', 'updated_at'])->makeVisible(['product_id']);
 
     // unique()
-    $res['unique'] = $orders->unique('product_no');
+    $res['unique'] = $orders->unique('product_id');
 
     // fresh(), load(), loadMissing(), toQuery()
 
@@ -120,8 +123,8 @@ Route::get('/user/list/didntbuy', function () {
 Route::get('/order/list/subquery', function () {
     // Practise Subquery by Eloquent ORM
     $orders = App\Models\Order::addSelect([
-        'email' => App\Models\User::select(['email'])->whereColumn('no', 'orders.user_buy'),
-        'grade' => App\Models\User::select(['grade'])->whereColumn('no', 'orders.user_buy')
+        'email' => App\Models\User::select(['email'])->whereColumn('id', 'orders.user_buy'),
+        'grade' => App\Models\User::select(['grade'])->whereColumn('id', 'orders.user_buy')
    ])->get();
 
     return view('order_list', [
@@ -145,9 +148,9 @@ Route::get('/order/list/relation', function () {
     ]);
 });
 
-Route::get('/order/list/{user_no}', function ($user_no) {
+Route::get('/order/list/{user_id}', function ($user_id) {
     // Practise querying relations by Eloquent ORM
-    $user = App\Models\User::where('no', $user_no)->first();
+    $user = App\Models\User::where('id', $user_id)->first();
 
     return view('user_list', [
         'users' => [$user]
@@ -155,7 +158,7 @@ Route::get('/order/list/{user_no}', function ($user_no) {
         'orders' => $user->buyOrders()->get(),
         'relation' => true
     ]);
-})->where('user_no', '[0-9]+');
+})->where('user_id', '[0-9]+');
 
 Route::get('/product/list', function () {
     $products = App\Models\Product::withCount('order')->get();
@@ -175,7 +178,7 @@ Route::get('fee/list', function () {
             $query->where('amt', '>=', '100');
 
             if ($type === 'App\Models\Product') {
-                $query->where('billed_no', '<=', '5');
+                $query->where('billed_id', '<=', '5');
             }
         })->get();
 
