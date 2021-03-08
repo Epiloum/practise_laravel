@@ -60,19 +60,30 @@ services:
       - app-network
 
   #PHP MyAdmin
-  myadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: myadmin
+#  myadmin:
+#    image: phpmyadmin/phpmyadmin
+#    container_name: myadmin
+#    ports:
+#      - 49080:80
+#    environment:
+#      UPLOAD_LIMIT: 1024M
+#      PMA_HOST: mysql
+#    volumes:
+#      - ./.docker/mysql/data:/var/lib/mysql/data
+#      - ./.docker/mysql/conf/my.cnf:/etc/mysql/conf/my.cnf
+#    networks:
+#      - app-network
+
+  #adminer
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
     ports:
-      - "49080:80"
-    environment:
-      UPLOAD_LIMIT: 1024M
-      PMA_HOST: mysql
-    volumes:
-      - ./.docker/mysql/data:/var/lib/mysql/data
-      - ./.docker/mysql/conf/my.cnf:/etc/mysql/conf/my.cnf
+      - 49080:8080
     networks:
       - app-network
+
 #Docker Networks
 networks:
   app-network:
