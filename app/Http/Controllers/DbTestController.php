@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DbTestController extends Controller
 {
-    public function test_connection()
+    public function testConnection(): string
     {
         $users = DB::connection('mysql');
         ob_start();
@@ -16,16 +16,32 @@ class DbTestController extends Controller
         return '<pre>' . ob_get_clean() . '<pre>';
     }
 
-    public function test_query()
+    public function testQuery(): string
     {
-        $users = DB::connection('mysql')->select('select * from users where id = ?', [7, 11,28]);
+        $users = DB::connection('mysql')->select('select * from users where id = ?', [7, 11, 28]);
         ob_start();
         var_dump($users);
 
         return '<pre>' . ob_get_clean() . '<pre>';
     }
 
-    public function test_collection()
+    public function testClosure()
+    {
+        $users = DB::table('users')
+            ->where(function ($query) {
+                $query
+                    ->where('name', 'MzmQjX5e5FIhMG7CXK')
+                    ->orWhere('name', 'LIWmMJyYgFzUmXfakq');
+            })
+            ->where('updated_at', null)
+            ->get();
+        ob_start();
+        var_dump($users);
+
+        return '<pre>' . ob_get_clean() . '<pre>';
+    }
+
+    public function testCollection(): string
     {
         $res = [];
 
