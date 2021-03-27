@@ -37,9 +37,13 @@ Route::get('/test/mw', function () {
     return 'mwtest(' . $_GET['value'] . ') ' . date('Y-m-d H:i:s');
 })->middleware(App\Http\Middleware\MwTest::class);
 
-// Controller & DB Query Test
-Route::get('/test/db', [App\Http\Controllers\DbTestController::class, 'test_query']);
-Route::get('/test/db/collection', [App\Http\Controllers\DbTestController::class, 'test_collection']);
+// Controller & DB Query Builder Test
+Route::get('/test/db', [App\Http\Controllers\DbTestController::class, 'testQuery']);
+Route::get('/test/db/closure', [App\Http\Controllers\DbTestController::class, 'testClosure']);
+Route::get('/test/db/collection', [App\Http\Controllers\DbTestController::class, 'testCollection']);
+
+// Queue TEst
+Route::get('/test/queue', [App\Http\Controllers\QueueTestController::class, 'test']);
 
 // Sign in for Validation Test
 Route::get('/signin', [App\Http\Controllers\SignIn::class, 'frm']);
