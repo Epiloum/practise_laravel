@@ -42,6 +42,9 @@ Route::get('/test/db', [App\Http\Controllers\DbTestController::class, 'testQuery
 Route::get('/test/db/closure', [App\Http\Controllers\DbTestController::class, 'testClosure']);
 Route::get('/test/db/collection', [App\Http\Controllers\DbTestController::class, 'testCollection']);
 
+// Queue TEst
+Route::get('/test/queue', [App\Http\Controllers\QueueTestController::class, 'test']);
+
 // Sign in for Validation Test
 Route::get('/signin', [App\Http\Controllers\SignIn::class, 'frm']);
 Route::post('/signin/proc', [App\Http\Controllers\SignIn::class, 'proc']);
