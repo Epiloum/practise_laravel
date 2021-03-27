@@ -94,17 +94,6 @@ services:
     networks:
       - app-network
 
-  #redis-commander - web GUI tool for redis
-  redis-commander:
-    container_name: redis-commander
-    hostname: redis-commander
-    image: rediscommander/redis-commander:latest
-    restart: always
-    environment:
-      - REDIS_HOSTS=redis:redis:6379
-    ports:
-      - 49081:8081
-
 #Docker Networks
 networks:
   app-network:
