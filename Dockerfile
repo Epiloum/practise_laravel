@@ -4,6 +4,9 @@ FROM php:7.4-fpm
 ARG user
 ARG uid
 
+# Root
+USER root
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -19,6 +22,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql mbstring exif pcntl bcmath gd
+RUN pecl install xdebug
+RUN zend_extension=xdebug.so
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

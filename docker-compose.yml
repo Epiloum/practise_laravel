@@ -4,8 +4,8 @@ services:
   #PHP Service
   app:
     build:
-      context: ..
-      dockerfile: ../Dockerfile
+      context: .
+      dockerfile: Dockerfile
       args:
         user: user
         uid: 1000
@@ -59,7 +59,7 @@ services:
     networks:
       - app-network
 
-  #PHP MyAdmin
+  #PHP MyAdmin - web GUI tool for MySQL
 #  myadmin:
 #    image: phpmyadmin/phpmyadmin
 #    container_name: myadmin
@@ -74,7 +74,7 @@ services:
 #    networks:
 #      - app-network
 
-  #adminer
+  #adminer - web GUI tool for MySQL
   adminer:
     image: adminer
     container_name: adminer
@@ -83,6 +83,27 @@ services:
       - 49080:8080
     networks:
       - app-network
+
+  #redis
+  redis:
+    image: redis:6.2.1
+    container_name: redis
+    command: redis-server --requirepass changeme --port 6379
+    ports:
+      - 6379:6379
+    networks:
+      - app-network
+
+  #redis-commander - web GUI tool for redis
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOSTS=redis:redis:6379
+    ports:
+      - 49081:8081
 
 #Docker Networks
 networks:
