@@ -41,4 +41,9 @@ class User extends Authenticatable
             'id'
         );
     }
+
+    public function managers()
+    {
+        return $this->hasMany('App\Models\Manager');
+    }
 }

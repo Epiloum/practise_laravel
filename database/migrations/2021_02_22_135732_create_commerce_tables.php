@@ -23,6 +23,24 @@ class CreateCommerceTables extends Migration
             $table->timestamps();
         });
 
+        // 권한
+        Schema::create('authorities', function (Blueprint $table) {
+            $table->id('id');
+            $table->string('code', 32);
+            $table->string('name', 32);
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        // 관리자
+        Schema::create('managers', function (Blueprint $table) {
+            $table->id('id');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('authority_id')->constrained('authorities');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         // 상품
         Schema::create('products', function (Blueprint $table) {
             $table->id('id');
@@ -76,6 +94,8 @@ class CreateCommerceTables extends Migration
     {
         Schema::dropIfExists('orders');
         Schema::dropIfExists('products');
+        Schema::dropIfExists('managers');
+        Schema::dropIfExists('authorities');
         Schema::dropIfExists('users');
         Schema::dropIfExists('fees');
         Schema::dropIfExists('scheduled');
